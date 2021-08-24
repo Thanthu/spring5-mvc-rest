@@ -16,9 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.thanthu.springmvcrest.api.v1.mapper.CategoryMapper;
+import com.thanthu.springmvcrest.api.v1.model.CategoryDTO;
 import com.thanthu.springmvcrest.domain.Category;
-import com.thanthu.springmvcrest.mapper.CategoryMapper;
-import com.thanthu.springmvcrest.model.CategoryDTO;
 import com.thanthu.springmvcrest.repositories.CategoryRepository;
 
 @ExtendWith(MockitoExtension.class)

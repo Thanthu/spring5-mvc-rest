@@ -2,7 +2,7 @@ package com.thanthu.springmvcrest.services;
 
 import java.util.List;
 
-import com.thanthu.springmvcrest.model.CategoryDTO;
+import com.thanthu.springmvcrest.api.v1.model.CategoryDTO;
 
 public interface CategoryService {
 

@@ -1,4 +1,4 @@
-package com.thanthu.springmvcrest.model;
+package com.thanthu.springmvcrest.api.v1.model;
 
 import lombok.Getter;
 import lombok.Setter;

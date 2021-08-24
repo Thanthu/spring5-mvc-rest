@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import com.thanthu.springmvcrest.api.v1.mapper.CategoryMapper;
+import com.thanthu.springmvcrest.api.v1.model.CategoryDTO;
 import com.thanthu.springmvcrest.domain.Category;
-import com.thanthu.springmvcrest.model.CategoryDTO;
 
 class CategoryMapperTest {
 

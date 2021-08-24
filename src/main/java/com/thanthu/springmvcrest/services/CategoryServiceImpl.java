@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.thanthu.springmvcrest.api.v1.mapper.CategoryMapper;
+import com.thanthu.springmvcrest.api.v1.model.CategoryDTO;
 import com.thanthu.springmvcrest.domain.Category;
-import com.thanthu.springmvcrest.mapper.CategoryMapper;
-import com.thanthu.springmvcrest.model.CategoryDTO;
 import com.thanthu.springmvcrest.repositories.CategoryRepository;
 
 @Service

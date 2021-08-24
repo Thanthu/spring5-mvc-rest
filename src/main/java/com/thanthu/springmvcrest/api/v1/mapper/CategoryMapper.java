@@ -1,10 +1,10 @@
-package com.thanthu.springmvcrest.mapper;
+package com.thanthu.springmvcrest.api.v1.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import com.thanthu.springmvcrest.api.v1.model.CategoryDTO;
 import com.thanthu.springmvcrest.domain.Category;
-import com.thanthu.springmvcrest.model.CategoryDTO;
 
 @Mapper(componentModel="spring")
 public interface CategoryMapper {
