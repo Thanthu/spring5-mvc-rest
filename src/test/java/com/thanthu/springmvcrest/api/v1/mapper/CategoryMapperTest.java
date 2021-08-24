@@ -1,4 +1,4 @@
-package com.thanthu.springmvcrest.mapper;
+package com.thanthu.springmvcrest.api.v1.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -6,11 +6,11 @@ import org.mapstruct.factory.Mappers;
 import com.thanthu.springmvcrest.api.v1.model.CategoryDTO;
 import com.thanthu.springmvcrest.domain.Category;
 
-@Mapper(componentModel="spring")
+@Mapper(componentModel = "spring")
 public interface CategoryMapper {
 
 	CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
-	
+
 	CategoryDTO categoryToCategoryDTO(Category category);
-	
+
 }
