@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.thanthu.springmvcrest.api.v1.model.CategoryDTO;
+import com.thanthu.springmvcrest.exxceptions.ResourceNotFoundException;
+import com.thanthu.springmvcrest.handlers.RestResponseEntityExceptionHandler;
 import com.thanthu.springmvcrest.services.CategoryService;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,7 +44,9 @@ class CategoryControllerTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
+				.setControllerAdvice(new RestResponseEntityExceptionHandler())
+				.build();
 
 		categoryDto = new CategoryDTO();
 		categoryDto.setId(ID);
@@ -65,6 +69,14 @@ class CategoryControllerTest {
 
 		mockMvc.perform(get("/api/v1/categories/Jim").contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(jsonPath("$.name", equalTo(NAME)));
+	}
+
+	@Test
+	public void testGetByNameNotFound() throws Exception {
+		when(categoryService.getCategoryByName(anyString())).thenThrow(ResourceNotFoundException.class);
+
+		mockMvc.perform(get(CategoryController.BASE_URL + "/Foo").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
 	}
 
 }

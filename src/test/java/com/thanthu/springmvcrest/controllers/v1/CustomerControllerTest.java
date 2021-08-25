@@ -28,6 +28,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.thanthu.springmvcrest.api.v1.model.CustomerDTO;
+import com.thanthu.springmvcrest.exxceptions.ResourceNotFoundException;
+import com.thanthu.springmvcrest.handlers.RestResponseEntityExceptionHandler;
 import com.thanthu.springmvcrest.services.CustomerService;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,7 +52,8 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+				.setControllerAdvice(new RestResponseEntityExceptionHandler()).build();
 
 		customerDto = new CustomerDTO();
 		customerDto.setFirstname(FIRST_NAME);
@@ -74,8 +77,8 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 		when(customerService.getCustomerById(anyLong())).thenReturn(customerDto);
 
 		// when
-		mockMvc.perform(get(CUSTOMER_API_URL + ID).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME)));
+		mockMvc.perform(get(CUSTOMER_API_URL + ID).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME)));
 	}
 
 	@Test
@@ -107,9 +110,9 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 		when(customerService.saveCustomerByDTO(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
 
 		// when/then
-		mockMvc.perform(put(CUSTOMER_API_URL + ID).contentType(MediaType.APPLICATION_JSON)
-				.content(asJsonString(customerDto))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME)))
+		mockMvc.perform(
+				put(CUSTOMER_API_URL + ID).contentType(MediaType.APPLICATION_JSON).content(asJsonString(customerDto)))
+				.andExpect(status().isOk()).andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME)))
 				.andExpect(jsonPath("$.lastname", equalTo(LAST_NAME)))
 				.andExpect(jsonPath("$.customer_url", equalTo(URL)));
 	}
@@ -131,14 +134,21 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 				.andExpect(jsonPath("$.lastname", equalTo("Flintstone")))
 				.andExpect(jsonPath("$.customer_url", equalTo(URL)));
 	}
-	
-	@Test
-    public void testDeleteCustomer() throws Exception {
-        mockMvc.perform(delete(CUSTOMER_API_URL + ID)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
 
-        verify(customerService, times(1)).deleteCustomerById(anyLong());
-    }
+	@Test
+	public void testDeleteCustomer() throws Exception {
+		mockMvc.perform(delete(CUSTOMER_API_URL + ID).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+
+		verify(customerService, times(1)).deleteCustomerById(anyLong());
+	}
+
+	@Test
+	public void testNotFoundException() throws Exception {
+		when(customerService.getCustomerById(anyLong())).thenThrow(ResourceNotFoundException.class);
+
+		mockMvc.perform(get(CustomerController.BASE_URL + "/222").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
+	}
 
 }

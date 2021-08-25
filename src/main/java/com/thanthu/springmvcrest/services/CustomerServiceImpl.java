@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.thanthu.springmvcrest.api.v1.mapper.CustomerMapper;
 import com.thanthu.springmvcrest.api.v1.model.CustomerDTO;
 import com.thanthu.springmvcrest.domain.Customer;
+import com.thanthu.springmvcrest.exxceptions.ResourceNotFoundException;
 import com.thanthu.springmvcrest.repositories.CustomerRepository;
 
 @Service
@@ -33,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public CustomerDTO getCustomerById(Long id) {
 		return customerRepository.findById(id).map(customerMapper::customerToCustomerDTO)
-				.orElseThrow(() -> new RuntimeException(String.format("Customer not found for ID '%d'", id)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format("Customer not found for ID '%d'", id)));
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class CustomerServiceImpl implements CustomerService {
 			CustomerDTO returnDto = customerMapper.customerToCustomerDTO(customerRepository.save(customer));
             returnDto.setCustomerUrl("/api/v1/customers/" + id);
             return returnDto;
-		}).orElseThrow(() -> new RuntimeException(String.format("Customer not found for ID '%d'", id)));
+		}).orElseThrow(() -> new ResourceNotFoundException(String.format("Customer not found for ID '%d'", id)));
 	}
 
 	@Override
