@@ -19,6 +19,7 @@ import com.thanthu.springmvcrest.bootstrap.Bootstrap;
 import com.thanthu.springmvcrest.domain.Customer;
 import com.thanthu.springmvcrest.repositories.CategoryRepository;
 import com.thanthu.springmvcrest.repositories.CustomerRepository;
+import com.thanthu.springmvcrest.repositories.VendorRepository;
 
 @DataJpaTest
 public class CustomerServiceImplIT {
@@ -28,6 +29,9 @@ public class CustomerServiceImplIT {
 
 	@Autowired
 	CategoryRepository categoryRepository;
+	
+	@Autowired
+    VendorRepository vendorRepository;
 
 	CustomerService customerService;
 
@@ -37,7 +41,7 @@ public class CustomerServiceImplIT {
 		System.out.println(customerRepository.findAll().size());
 
 		// setup data for testing
-		Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository);
+		Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository);
 		bootstrap.run(); // load data
 
 		customerService = new CustomerServiceImpl(CustomerMapper.INSTANCE, customerRepository);

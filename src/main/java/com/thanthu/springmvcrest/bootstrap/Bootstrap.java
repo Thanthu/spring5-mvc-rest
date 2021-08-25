@@ -5,18 +5,23 @@ import org.springframework.stereotype.Component;
 
 import com.thanthu.springmvcrest.domain.Category;
 import com.thanthu.springmvcrest.domain.Customer;
+import com.thanthu.springmvcrest.domain.Vendor;
 import com.thanthu.springmvcrest.repositories.CategoryRepository;
 import com.thanthu.springmvcrest.repositories.CustomerRepository;
+import com.thanthu.springmvcrest.repositories.VendorRepository;
 
 @Component
 public class Bootstrap implements CommandLineRunner {
 
 	private final CategoryRepository categoryRespository;
 	private final CustomerRepository customerRepository;
+	private final VendorRepository vendorRepository;
 
-	public Bootstrap(CategoryRepository categoryRespository, CustomerRepository customerRepository) {
+	public Bootstrap(CategoryRepository categoryRespository, CustomerRepository customerRepository,
+			VendorRepository vendorRepository) {
 		this.categoryRespository = categoryRespository;
 		this.customerRepository = customerRepository;
+		this.vendorRepository = vendorRepository;
 	}
 
 	@Override
@@ -24,6 +29,18 @@ public class Bootstrap implements CommandLineRunner {
 
 		loadCategories();
 		loadCustomers();
+		loadVendors();
+	}
+
+	private void loadVendors() {
+		Vendor vendor1 = new Vendor();
+		vendor1.setName("Vendor 1");
+		vendorRepository.save(vendor1);
+
+		Vendor vendor2 = new Vendor();
+		vendor2.setName("Vendor 2");
+		vendorRepository.save(vendor2);
+
 	}
 
 	private void loadCategories() {
