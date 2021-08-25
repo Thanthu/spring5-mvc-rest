@@ -27,6 +27,7 @@ import com.thanthu.springmvcrest.services.CategoryService;
 @ExtendWith(MockitoExtension.class)
 class CategoryControllerTest {
 
+	static final String CATEGORY_API_URL = CategoryController.BASE_URL + "/";
 	public static final String NAME = "Thanthu";
 	public static final Long ID = 1L;
 	CategoryDTO categoryDto;
@@ -54,7 +55,7 @@ class CategoryControllerTest {
 
 		when(categoryService.getAllCategories()).thenReturn(categories);
 
-		mockMvc.perform(get("/api/v1/categories/").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+		mockMvc.perform(get(CATEGORY_API_URL).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.categories", hasSize(1)));
 	}
 
