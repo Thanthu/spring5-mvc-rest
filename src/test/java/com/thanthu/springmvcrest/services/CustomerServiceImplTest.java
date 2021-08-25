@@ -3,6 +3,7 @@ package com.thanthu.springmvcrest.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,20 +28,25 @@ class CustomerServiceImplTest {
 	CustomerMapper customerMapper = CustomerMapper.INSTANCE;
 
 	CustomerService customerService;
-	
+
 	static final Long ID = 1L;
 	static final String FIRST_NAME = "Thanthu";
 	static final String LAST_NAME = "Nair";
 	Customer customer;
+	CustomerDTO customerDTO;
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		customerService = new CustomerServiceImpl(customerMapper, customerRepository);
-		
+
 		customer = new Customer();
 		customer.setId(ID);
 		customer.setFirstname(FIRST_NAME);
 		customer.setLastname(LAST_NAME);
+
+		customerDTO = new CustomerDTO();
+		customerDTO.setFirstname(FIRST_NAME);
+		customerDTO.setLastname(LAST_NAME);
 	}
 
 	@Test
@@ -65,6 +71,20 @@ class CustomerServiceImplTest {
 		CustomerDTO customerDTO = customerService.getCustomerById(ID);
 
 		assertEquals(FIRST_NAME, customerDTO.getFirstname());
+	}
+
+	@Test
+	public void createNewCustomer() throws Exception {
+
+		// given
+		when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+
+		// when
+		CustomerDTO savedDto = customerService.createNewCustomer(customerDTO);
+
+		// then
+		assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
+		assertEquals("/api/v1/customers/" + ID, savedDto.getCustomerUrl());
 	}
 
 }

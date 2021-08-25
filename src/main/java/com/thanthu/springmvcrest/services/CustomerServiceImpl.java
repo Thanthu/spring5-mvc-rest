@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.thanthu.springmvcrest.api.v1.mapper.CustomerMapper;
 import com.thanthu.springmvcrest.api.v1.model.CustomerDTO;
+import com.thanthu.springmvcrest.domain.Customer;
 import com.thanthu.springmvcrest.repositories.CustomerRepository;
 
 @Service
@@ -33,6 +34,15 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerDTO getCustomerById(Long id) {
 		return customerRepository.findById(id).map(customerMapper::customerToCustomerDTO)
 				.orElseThrow(() -> new RuntimeException(String.format("Customer not found for ID '%d'", id)));
+	}
+
+	@Override
+	public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
+		Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+		Customer savedCustomer = customerRepository.save(customer);
+		CustomerDTO returnDto = customerMapper.customerToCustomerDTO(savedCustomer);
+		returnDto.setCustomerUrl("/api/v1/customers/" + savedCustomer.getId());
+		return returnDto;
 	}
 
 }
