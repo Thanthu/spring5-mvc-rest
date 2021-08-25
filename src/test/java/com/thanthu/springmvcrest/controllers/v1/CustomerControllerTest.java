@@ -1,10 +1,13 @@
 package com.thanthu.springmvcrest.controllers.v1;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,8 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -124,10 +125,19 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 		when(customerService.patchCustomer(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
 
 		mockMvc.perform(
-				patch("/api/v1/customers/1").contentType(MediaType.APPLICATION_JSON).content(asJsonString(customerDto)))
+				patch("/api/v1/customers/" + ID).contentType(MediaType.APPLICATION_JSON).content(asJsonString(customerDto)))
 				.andExpect(status().isOk()).andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME)))
 				.andExpect(jsonPath("$.lastname", equalTo("Flintstone")))
 				.andExpect(jsonPath("$.customer_url", equalTo(URL)));
 	}
+	
+	@Test
+    public void testDeleteCustomer() throws Exception {
+        mockMvc.perform(delete("/api/v1/customers/" + ID)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(customerService, times(1)).deleteCustomerById(anyLong());
+    }
 
 }

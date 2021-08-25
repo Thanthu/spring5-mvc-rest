@@ -2,6 +2,8 @@ package com.thanthu.springmvcrest.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -86,23 +88,29 @@ class CustomerServiceImplTest {
 		assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
 		assertEquals("/api/v1/customers/" + ID, savedDto.getCustomerUrl());
 	}
-	
+
 	@Test
-    public void saveCustomerByDTO() throws Exception {
-        //given
-        Customer savedCustomer = new Customer();
-        savedCustomer.setFirstname(customerDTO.getFirstname());
-        savedCustomer.setLastname(customerDTO.getLastname());
-        savedCustomer.setId(ID);
+	public void saveCustomerByDTO() throws Exception {
+		// given
+		Customer savedCustomer = new Customer();
+		savedCustomer.setFirstname(customerDTO.getFirstname());
+		savedCustomer.setLastname(customerDTO.getLastname());
+		savedCustomer.setId(ID);
 
-        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+		when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
 
-        //when
-        CustomerDTO savedDto = customerService.saveCustomerByDTO(ID, customerDTO);
+		// when
+		CustomerDTO savedDto = customerService.saveCustomerByDTO(ID, customerDTO);
 
-        //then
-        assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
-        assertEquals("/api/v1/customers/" + ID, savedDto.getCustomerUrl());
-    }
+		// then
+		assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
+		assertEquals("/api/v1/customers/" + ID, savedDto.getCustomerUrl());
+	}
+
+	@Test
+	public void deleteCustomerById() throws Exception {
+		customerRepository.deleteById(1L);
+		verify(customerRepository, times(1)).deleteById(1L);
+	}
 
 }

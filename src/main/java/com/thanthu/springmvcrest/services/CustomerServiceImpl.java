@@ -70,4 +70,9 @@ public class CustomerServiceImpl implements CustomerService {
 		}).orElseThrow(() -> new RuntimeException(String.format("Customer not found for ID '%d'", id)));
 	}
 
+	@Override
+	public void deleteCustomerById(Long id) {
+		customerRepository.deleteById(id);
+	}
+
 }
