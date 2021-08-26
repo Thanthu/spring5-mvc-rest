@@ -11,6 +11,10 @@ import com.thanthu.springmvcrest.api.v1.model.CategoryDTO;
 import com.thanthu.springmvcrest.api.v1.model.CatorgoryListDTO;
 import com.thanthu.springmvcrest.services.CategoryService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(description = "APIs to interact with CAtegory", name = "Category APIs")
 @RestController
 @RequestMapping(CategoryController.BASE_URL)
 public class CategoryController {
@@ -23,12 +27,14 @@ public class CategoryController {
 		this.categoryService = categoryService;
 	}
 
+	@Operation(summary = "Get list of Categories")
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public CatorgoryListDTO getallCatetories() {
 		return new CatorgoryListDTO(categoryService.getAllCategories());
 	}
 
+	@Operation(summary = "Get Category by name")
 	@GetMapping("/{name}")
 	@ResponseStatus(HttpStatus.OK)
 	public CategoryDTO getCategoryByName(@PathVariable String name) {

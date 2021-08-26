@@ -1,5 +1,7 @@
 package com.thanthu.springmvcrest.controllers.v1;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,10 @@ import com.thanthu.springmvcrest.api.v1.model.CustomerDTO;
 import com.thanthu.springmvcrest.api.v1.model.CustomerListDTO;
 import com.thanthu.springmvcrest.services.CustomerService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(description = "APIs to interact with Customers", name = "Customer APIs")
 @RestController
 @RequestMapping(CustomerController.BASE_URL)
 public class CustomerController {
@@ -28,36 +34,42 @@ public class CustomerController {
 		this.customerService = customerService;
 	}
 
+	@Operation(summary = "Get list of Customers", description = "Some additional info about this API can be provided here")
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public CustomerListDTO getListofCustomers() {
 		return new CustomerListDTO(customerService.getAllCustomers());
 	}
 
+	@Operation(summary = "Get details of a Customer.")
 	@GetMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public CustomerDTO getCustomerById(@PathVariable Long id) {
 		return customerService.getCustomerById(id);
 	}
 
+	@Operation(summary = "Create Customer.")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CustomerDTO createNewCustomer(@RequestBody CustomerDTO customerDTO) {
+	public CustomerDTO createNewCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
 		return customerService.createNewCustomer(customerDTO);
 	}
 
+	@Operation(summary = "Update Customer.")
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public CustomerDTO updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+	public CustomerDTO updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerDTO customerDTO) {
 		return customerService.saveCustomerByDTO(id, customerDTO);
 	}
 
+	@Operation(summary = "Make partial updates on Customer.")
 	@PatchMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public CustomerDTO patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+	public CustomerDTO patchCustomer(@PathVariable Long id, @Valid @RequestBody CustomerDTO customerDTO) {
 		return customerService.patchCustomer(id, customerDTO);
 	}
 
+	@Operation(summary = "Delete Customer.")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteCustomer(@PathVariable Long id) {

@@ -1,5 +1,7 @@
 package com.thanthu.springmvcrest.controllers.v1;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,10 @@ import com.thanthu.springmvcrest.api.v1.model.VendorDTO;
 import com.thanthu.springmvcrest.api.v1.model.VendorListDTO;
 import com.thanthu.springmvcrest.services.VendorService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Vemdor APIs", description = "APIs to interact with Vendors")
 @RestController
 @RequestMapping(VendorController.BASE_URL)
 public class VendorController {
@@ -28,36 +34,42 @@ public class VendorController {
 		this.vendorService = vendorService;
 	}
 
+	@Operation(summary = "Get list of Vendors")
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public VendorListDTO getVendorList() {
 		return vendorService.getAllVendors();
 	}
 
+	@Operation(summary = "Get details of a Vendor")
 	@GetMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public VendorDTO getVendorById(@PathVariable Long id) {
 		return vendorService.getVendorById(id);
 	}
 
+	@Operation(summary = "Create Vendor")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public VendorDTO createNewVendor(@RequestBody VendorDTO vendorDTO) {
+	public VendorDTO createNewVendor(@Valid @RequestBody VendorDTO vendorDTO) {
 		return vendorService.createNewVendor(vendorDTO);
 	}
 
+	@Operation(summary = "Update Vendor")
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public VendorDTO updateVendor(@PathVariable Long id, @RequestBody VendorDTO vendorDTO) {
+	public VendorDTO updateVendor(@PathVariable Long id, @Valid @RequestBody VendorDTO vendorDTO) {
 		return vendorService.saveVendorByDTO(id, vendorDTO);
 	}
 
+	@Operation(summary = "Make partial updates on Vendor")
 	@PatchMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public VendorDTO patchVendor(@PathVariable Long id, @RequestBody VendorDTO vendorDTO) {
+	public VendorDTO patchVendor(@PathVariable Long id, @Valid @RequestBody VendorDTO vendorDTO) {
 		return vendorService.saveVendorByDTO(id, vendorDTO);
 	}
 
+	@Operation(summary = "Delete Vendor")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteVendor(@PathVariable Long id) {
